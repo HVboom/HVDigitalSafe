@@ -16,6 +16,7 @@ gem 'rails', '~> 5.1.0'
 gem 'mysql2', '>= 0.3.18', '< 0.5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
+gem 'active_model_serializers'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
@@ -26,6 +27,9 @@ gem 'mysql2', '>= 0.3.18', '< 0.5'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
+
+# Transfert access tokens JsonWebToken encoded
+gem 'jwt'
 
 # Even production DB will be seeded with faked data
 gem 'faker'
