@@ -2,25 +2,38 @@ require 'jwt'
 
 module HVCrypto
   class JWT
+    KEY = Rails.application.secrets.hmac_key
     ALGORITHM = 'HS512'
+    ISSUER = Rails.application.class.name.deconstantize
+    AUDIENCE = Rails.application.secrets.audience
 
     # Encodes and signs JWT payload
     def self.encode(data, claims = {})
       payload = {}
       payload[:data] = data
-      payload.reverse_merge!(claims)
+      payload.merge!(claims)
       payload.reverse_merge!(default_claims)
-      ::JWT.encode(payload, Rails.application.secrets.hmac_key, ALGORITHM)
+      ::JWT.encode(payload, KEY, ALGORITHM)
     end
 
-    # Decodes the JWT with the signed secret
+    # Decodes the JWT token with the signed secret
     def self.decode(token, claims = {})
       begin
         # Add iss to the validation to check if the token has been manipulated
-        payload = ::JWT.decode(token, Rails.application.secrets.hmac_key, true, decode_header.merge(claims))
-        # Rails.logger.debug "Payload decoded: #{payload.inspect}"
+        payload = ::JWT.decode(token, KEY, true, decode_header.merge(claims))
         payload[0].with_indifferent_access[:data]
       rescue ::JWT::InvalidIssuerError, ::JWT::InvalidAudError
+        Rails.logger.error '!!! You are under attack!'
+        unless @usage
+          Rails.logger.warn %q{
+            Maybe your setup is not completed.
+            Please either setup the secret key _Rails.application.secrets.audience_ or
+            provide the _aud_ claim to the _encode_ / _decode_ calls
+          }
+          @usage = true
+        end
+        # slow down attacks
+        sleep(Random.rand(3))
         nil
       end
     end
@@ -28,8 +41,10 @@ module HVCrypto
     # Default options to be encoded in the token
     def self.default_claims
       {
-        iss: Rails.application.class.name.deconstantize,
-        aud: 'HVKeyGuard'
+        iss: ISSUER,
+        # If the AUDIENCE is not set - ensure, that all generated tokens
+        # are *NOT* valid. Only if the _aud_ claim is provided it will work.
+        aud: AUDIENCE || SecureRandom.base58(32)
       }
     end
 

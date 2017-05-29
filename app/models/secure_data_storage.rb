@@ -1,4 +1,7 @@
 class SecureDataStorage < ApplicationRecord
+  # virtual attributes
+  attr_accessor :audience
+
   validates_uniqueness_of :token
 
   def initialize(attriubtes = {})
@@ -6,8 +9,7 @@ class SecureDataStorage < ApplicationRecord
     # do NOT use the default assign method
     self[:token] = SecureRandom.base58(32)
     self.document = Faker::Internet.password(6, 12, true, true)
-    # self.token = 'Token_' + Random.rand(1_000_000_000).to_s
-    # self.document = Faker::Name.last_name
+    self.audience = {}
   end
 
   # use the token for the URLs
@@ -22,19 +24,28 @@ class SecureDataStorage < ApplicationRecord
 
   # expose JWT encoded tokens to the outside world
   def token
-    HVCrypto::JWT.encode(self[:token])
+    HVCrypto::JWT.encode(self[:token], audience)
   end
 
   # JWT ensures that nobody can temper the tokens
   def token=(token)
-    self[:token] = HVCrypto::JWT.decode(token)
+    self[:token] = HVCrypto::JWT.decode(token, audience)
+  end
+
+  # obscure stored data
+  def document
+    HVCrypto::Synchron.decode(self[:document])
+  end
+
+  def document=(document)
+    self[:document] = HVCrypto::Synchron.encode(document)
   end
 
   def self.seed!
-    [Random.rand(2112), 765].max.times { self.create! }
+    [Random.rand(2112), 765].max.times { try(:create!) }
   end
 
-  def self.rand
+  def self.rand(audience)
     # number of available records
     @count ||= count
     # automatically generate fake entries, if the table is empty
@@ -44,7 +55,9 @@ class SecureDataStorage < ApplicationRecord
     @first ||= first[:id]
     begin
       retries ||= 0
-      find(Random.rand(@count) + @first)
+      sds = find(Random.rand(@count) + @first)
+      sds.audience = audience
+      sds
     rescue ActiveRecord::RecordNotFound
       # normally there are no gaps in the ids - therefore it is save to just retry
       retry if (retries += 1) < 10
