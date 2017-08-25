@@ -14,6 +14,8 @@
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'HVboom'
   inflect.uncountable 'HVboom'
+  inflect.acronym 'HVDigitalSafe'
+  inflect.uncountable 'HVDigitalSafe'
   inflect.acronym 'HVCrypto'
   inflect.uncountable 'HVCrypto'
   inflect.acronym 'JWT'
