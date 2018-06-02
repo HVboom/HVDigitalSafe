@@ -1,4 +1,4 @@
-#ruby=ruby-2.5
+#ruby=ruby-2.5.1
 #ruby-gemset=HVDigitalSafe
 #
 
