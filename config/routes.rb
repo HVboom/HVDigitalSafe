@@ -7,14 +7,14 @@ Rails.application.routes.draw do
     defaults format: 'json' do
       #get 'secure_data_storages/new'
       get 'new', to: 'secure_data_storages#new'
-      root to: 'secure_data_storages#new'
+      patch '/', to: 'secure_data_storages#update'
 
       constraints token: %r{[^\/]+} do
         # get 'secure_data_storages/:token', to: 'secure_data_storages#show'
-        # patch 'secure_data_storages/:token', to: 'secure_data_storages#update'
         get ':token', to: 'secure_data_storages#show'
-        patch ':token', to: 'secure_data_storages#update'
       end
+
+      root to: 'secure_data_storages#new'
     end
   end
 end

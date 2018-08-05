@@ -9,7 +9,9 @@ class SecureDataStorage < ApplicationRecord
     # do NOT use the default assign method
     self[:token] = SecureRandom.base58(32)
     self.document = Faker::Internet.password(6, 12, true, true)
+    # ensure, that faked data can never be decoded
     self.audience = {}
+    self.audience[:aud] = SecureRandom.base58(32)
   end
 
   # use the token for the URLs
@@ -46,6 +48,8 @@ class SecureDataStorage < ApplicationRecord
   end
 
   def self.rand(audience)
+    return self.new unless audience && audience[:aud]
+
     # number of available records
     @count ||= count
     # automatically generate fake entries, if the table is empty

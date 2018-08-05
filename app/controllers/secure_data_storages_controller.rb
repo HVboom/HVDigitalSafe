@@ -1,18 +1,19 @@
 class SecureDataStoragesController < ApplicationController
-  before_action :set_sds, only: [:show, :update]
+  before_action :set_sds_using_parameter, only: [:show]
+  before_action :set_sds_using_payload, only: [:update]
   before_action :validate_type, only: [:update]
 
   def new
-    @sds = SecureDataStorage.rand(audience)
+    @sds = SecureDataStorage.rand(@audience)
     render json: @sds, status: :ok
   end
 
   def show
-    if @sds
-      render json: @sds, status: :ok
-    else
-      new
+    # return fake data, if the token could not be found
+    unless @sds
+      @sds = SecureDataStorage.new
     end
+    render json: @sds, status: :ok
   end
 
   def update
@@ -31,19 +32,20 @@ class SecureDataStoragesController < ApplicationController
 
 private
 
-  def audience
-    aud_claim = {}
-    api_key = request.headers["X-Api-Key"]
-    aud_claim[:aud] = HVCrypto::Synchron.decode(api_key) if api_key
-    aud_claim
+  def set_sds_using_parameter
+    set_sds(HVCrypto::JWT.decode(params[:token], @audience))
   end
 
-  def set_sds
+  def set_sds_using_payload
+    set_sds(HVCrypto::JWT.decode(sds_params[:id], @audience))
+  end
+
+  def set_sds(token = nil)
     begin
-      token = HVCrypto::JWT.decode(params[:token], audience)
       raise ActiveRecord::RecordNotFound unless token
+
       @sds = SecureDataStorage.find_by_token(token)
-      @sds.audience = audience
+      @sds.audience = @audience
     rescue # ActiveRecord::RecordNotFound
       @sds = nil
     end

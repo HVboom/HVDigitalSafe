@@ -3,6 +3,7 @@ require 'jwt'
 module HVCrypto
   class JWT
     KEY = Rails.application.secrets.hmac_key
+    API_KEY_AUD = Rails.application.secrets.api_key_aud
     ALGORITHM = 'HS512'
     ISSUER = Rails.application.class.name.deconstantize
     AUDIENCE = Rails.application.secrets.audience
@@ -22,7 +23,7 @@ module HVCrypto
         # Add iss to the validation to check if the token has been manipulated
         payload = ::JWT.decode(token, KEY, true, decode_header.merge(claims))
         payload[0].with_indifferent_access[:data]
-      rescue ::JWT::InvalidIssuerError, ::JWT::InvalidAudError
+      rescue ::JWT::InvalidIssuerError, ::JWT::InvalidAudError, ::JWT::DecodeError
         Rails.logger.error '!!! You are under attack!'
         unless @usage
           Rails.logger.warn %q{
@@ -36,6 +37,14 @@ module HVCrypto
         sleep(Random.rand(3))
         nil
       end
+    end
+
+    # Decodes the JWT token with the API key secret
+    def self.decode_api_key(token, claims = {})
+      return nil unless token
+
+      claims.reverse_merge!({aud: API_KEY_AUD})
+      self.decode(token, claims)
     end
 
     # Default options to be encoded in the token
