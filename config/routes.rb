@@ -5,11 +5,9 @@ Rails.application.routes.draw do
   #   - trick found here: https://github.com/rails/rails/issues/28901
   scope format: false do
     defaults format: 'json' do
-      #get 'secure_data_storages/new'
-      get 'new', to: 'secure_data_storages#new'
       patch '/', to: 'secure_data_storages#update'
 
-      constraints token: %r{[^\/]+} do
+      constraints token: %r{/^[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?$/} do
         # get 'secure_data_storages/:token', to: 'secure_data_storages#show'
         get ':token', to: 'secure_data_storages#show'
       end
