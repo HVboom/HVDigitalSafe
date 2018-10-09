@@ -9,20 +9,20 @@ class ApplicationController < ActionController::API
       unless @usage_api_key
         Rails.logger.warn %q{
           Maybe your setup is not completed.
-          Please either setup the secret key _Rails.application.secrets.api_key_ in HVKeyGuard
+          Please either setup the secret key *Rails.application.secrets.api_key* in HVKeyGuard
           (if this is your client application) or
-          ensure to provide the header parameter_X-Api-Key_ if you have written you own client
+          ensure to provide the header parameter *X-Api-Key* if you have written you own client
         }
-        @usage_api_key_api_key = true
+        @usage_api_key = true
       end
 
-      head :not_acceptable and return
+      head :unauthorized and return
     end
   end
 
   def validate_header
     if ['POST','PUT','PATCH'].include? request.method
-      if request.content_type != "application/vnd.api+json"
+      if request.content_type != 'application/vnd.api+json'
         head :not_acceptable and return
       end
     end
@@ -46,9 +46,8 @@ class ApplicationController < ActionController::API
 
   def audience
     aud_claim = {}
-    api_key = request.headers["X-Api-Key"]
+    api_key = request.headers['X-Api-Key']
     aud_claim[:aud] = HVCrypto::JWT.decode_api_key(api_key)
     aud_claim
   end
-
 end
