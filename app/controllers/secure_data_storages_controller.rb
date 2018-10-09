@@ -4,8 +4,12 @@ class SecureDataStoragesController < ApplicationController
   before_action :validate_type, only: [:update]
 
   def new
-    @sds = SecureDataStorage.rand(@audience)
-    render json: @sds, status: :ok
+    begin
+      @sds = SecureDataStorage.rand(@audience)
+      render json: @sds, status: :ok
+    rescue ActiveRecord::RecordNotFound
+      head :service_unavailable
+    end
   end
 
   def show
