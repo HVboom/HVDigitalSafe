@@ -43,28 +43,37 @@ class SecureDataStorage < ApplicationRecord
     self[:document] = HVCrypto::Synchron.encode(document)
   end
 
+  def self.number_of_seed_records
+    [Random.rand(2112), 765].max
+  end
+
   def self.seed!
-    [Random.rand(2112), 765].max.times { try(:create!) }
+    number_of_seed_records.times { try(:create!) }
   end
 
   def self.rand(audience)
     return self.new unless audience && audience[:aud]
 
-    # number of available records
-    @count ||= count
-    # automatically generate fake entries, if the table is empty
-    @count = seed! unless @count > 0
-    # safety net if table is cleared, but not re-created
-    #     id is hidden to the outside world, therefore the raw data has to be used
-    @first ||= first[:id]
     begin
+      @@count ||= count
+      @@count = seed! unless @@count > 0
+      # id is hidden to the outside world, therefore the raw data has to be used
+      @@first ||= first[:id]
+
       retries ||= 0
-      sds = find(Random.rand(@count) + @first)
+      sds = find(Random.rand(@@count) + @@first)
       sds.audience = audience
       sds
     rescue ActiveRecord::RecordNotFound
       # normally there are no gaps in the ids - therefore it is save to just retry
+      c = @@count
+      f = @@first
+      @@count = nil
+      @@first = nil
       retry if (retries += 1) < 10
+
+      logger.fatal "Somehow the DB is in a bad state! - number of records: #{c} - first id: #{f}"
+      raise
     end
   end
 end
