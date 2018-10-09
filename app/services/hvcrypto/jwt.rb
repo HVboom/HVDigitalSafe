@@ -7,6 +7,7 @@ module HVCrypto
     ALGORITHM = 'HS512'
     ISSUER = Rails.application.class.name.deconstantize
     AUDIENCE = Rails.application.secrets.audience
+    PATTERN = %r{[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?}
 
     # Encodes and signs JWT payload
     def self.encode(data, claims = {})
