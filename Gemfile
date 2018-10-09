@@ -43,7 +43,9 @@ group :development, :test do
 
   # Testing with RSpec
   gem 'rspec-rails'
+  gem 'rspec-json_matchers'
   gem 'factory_bot_rails'
+  gem 'database_cleaner'
 
   # Better console
   gem 'pry-rails'
