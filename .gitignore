@@ -17,4 +17,11 @@ vendor/bundle/
 !/log/.keep
 !/tmp/.keep
 
+# Ignore debuging history
 .byebug_history
+
+# Ignore rspec temporary test results
+/spec/examples.txt
+
+# Ignore temporary files
+**.swp
