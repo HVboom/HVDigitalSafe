@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170516070108) do
+ActiveRecord::Schema.define(version: 2017_05_16_070108) do
 
-  create_table "secure_data_storages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "secure_data_storages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "token", null: false, comment: "Unique identifier of the secured document"
     t.text "document", comment: "Base64 encrypted document"
     t.index ["token"], name: "index_secure_data_storages_on_token", unique: true
