@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2017_05_16_070108) do
 
-  create_table "secure_data_storages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "secure_data_storages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "token", null: false, comment: "Unique identifier of the secured document"
     t.text "document", comment: "Base64 encrypted document"
     t.index ["token"], name: "index_secure_data_storages_on_token", unique: true

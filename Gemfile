@@ -1,4 +1,4 @@
-#ruby=ruby-2.5.1
+#ruby=ruby-2.6.5
 #ruby-gemset=HVDigitalSafe
 #
 
@@ -13,7 +13,8 @@ end
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2'
 # Use mysql as the database for Active Record
-gem 'mysql2', '>= 0.3.18', '< 0.5'
+gem 'mysql2' # , '>= 0.3.18', '< 0.5'
+#
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 gem 'active_model_serializers'
@@ -26,7 +27,7 @@ gem 'active_model_serializers'
 # gem 'capistrano-rails', group: :development
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.1.0', require: false
+gem 'bootsnap', require: false # , '>= 1.1.0'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
