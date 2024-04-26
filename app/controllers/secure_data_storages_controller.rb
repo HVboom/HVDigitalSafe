@@ -23,7 +23,7 @@ class SecureDataStoragesController < ApplicationController
   def update
     # faked data are not stored
     if @sds
-      if allowed_sds_params && @sds.update_attributes(allowed_sds_params)
+      if allowed_sds_params && @sds.update(allowed_sds_params)
         head :no_content
       else
         render_error(@sds, :unprocessable_entity)

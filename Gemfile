@@ -1,4 +1,4 @@
-#ruby=ruby-2.6.5
+#ruby=ruby-3.3.0
 #ruby-gemset=HVDigitalSafe
 #
 
@@ -11,7 +11,7 @@ end
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2'
+gem 'rails', '~> 7.1'
 # Use mysql as the database for Active Record
 gem 'mysql2' # , '>= 0.3.18', '< 0.5'
 #
