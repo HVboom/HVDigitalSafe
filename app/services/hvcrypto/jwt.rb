@@ -29,7 +29,7 @@ module HVCrypto
         unless @usage
           Rails.logger.warn %q{
             Maybe your setup is not completed.
-            Please either setup the secret key _Rails.application.credentials[:audience_] or
+            Please either setup the secret key _Rails.application.credentials[:audience]_ or
             provide the _aud_ claim to the _encode_ / _decode_ calls
           }
           @usage = true
