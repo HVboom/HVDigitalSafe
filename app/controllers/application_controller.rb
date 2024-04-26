@@ -9,7 +9,7 @@ class ApplicationController < ActionController::API
       unless @usage_api_key
         Rails.logger.warn %q{
           Maybe your setup is not completed.
-          Please either setup the secret key *Rails.application.secrets.api_key* in HVKeyGuard
+          Please either setup the secret key *Rails.application.credentials[:api_key]* in HVKeyGuard
           (if this is your client application) or
           ensure to provide the header parameter *X-Api-Key* if you have written you own client
         }
@@ -22,7 +22,7 @@ class ApplicationController < ActionController::API
 
   def validate_header
     if ['POST','PUT','PATCH'].include? request.method
-      if request.content_type != 'application/vnd.api+json'
+      if request.media_type != 'application/vnd.api+json'
         head :not_acceptable and return
       end
     end

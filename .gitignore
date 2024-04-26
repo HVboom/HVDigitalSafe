@@ -5,7 +5,8 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 # Ignore sensitive files
-/config/secrets.yml
+/config/master.key
+/config/credentials/*.key
 
 # Ignore bundler config.
 /.bundle
@@ -16,6 +17,9 @@ vendor/bundle/
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+
+# Ignore cache data
+node_modules/*
 
 # Ignore debuging history
 .byebug_history

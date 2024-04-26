@@ -1,7 +1,7 @@
 module HVCrypto
   class Synchron
-    KEY = ActiveSupport::KeyGenerator.new(Rails.application.secrets.message_key).
-      generate_key(Rails.application.secrets.secret_key_base, 32)
+    KEY = ActiveSupport::KeyGenerator.new(Rails.application.credentials[:message_key]).
+      generate_key(Rails.application.credentials[:secret_key_base], 32)
     ENCRYPTOR = ActiveSupport::MessageEncryptor.new(KEY)
 
     # Encodes and signs with MessageEncryptor

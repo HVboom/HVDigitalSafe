@@ -2,11 +2,11 @@ require 'jwt'
 
 module HVCrypto
   class JWT
-    KEY = Rails.application.secrets.hmac_key
-    API_KEY_AUD = Rails.application.secrets.api_key_aud
+    KEY = Rails.application.credentials[:hmac_key]
+    API_KEY_AUD = Rails.application.credentials[:api_key_aud]
     ALGORITHM = 'HS512'
     ISSUER = Rails.application.class.name.deconstantize
-    AUDIENCE = Rails.application.secrets.audience
+    AUDIENCE = Rails.application.credentials[:audience]
     PATTERN = %r{[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?}
 
     # Encodes and signs JWT payload
@@ -29,7 +29,7 @@ module HVCrypto
         unless @usage
           Rails.logger.warn %q{
             Maybe your setup is not completed.
-            Please either setup the secret key _Rails.application.secrets.audience_ or
+            Please either setup the secret key _Rails.application.credentials[:audience_] or
             provide the _aud_ claim to the _encode_ / _decode_ calls
           }
           @usage = true

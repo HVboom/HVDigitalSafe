@@ -45,8 +45,8 @@ end
 
 def create_api_key(key = 'Test')
   audience = {}
-  audience[:iss] = Rails.application.class.parent_name
-  audience[:aud] = Rails.application.secrets.api_key_aud
+  audience[:iss] = Rails.application.class.module_parent_name
+  audience[:aud] = Rails.application.credentials[:api_key_aud]
 
   HVCrypto::JWT.encode(key, audience)
 end

@@ -14,9 +14,9 @@ default: &default
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   socket: /tmp/mysql.sock
-  database: <%= Rails.application.secrets.mysql_db %>
-  username: <%= Rails.application.secrets.mysql_username %>
-  password: <%= Rails.application.secrets.mysql_password %>
+  database: <%= Rails.application.credentials[:mysql_db] %>
+  username: <%= Rails.application.credentials[:mysql_username] %>
+  password: <%= Rails.application.credentials[:mysql_password] %>
 
 development:
   <<: *default

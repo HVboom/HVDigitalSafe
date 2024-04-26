@@ -8,7 +8,7 @@ class SecureDataStorage < ApplicationRecord
     super
     # do NOT use the default assign method
     self[:token] = SecureRandom.base58(32)
-    self.document = Faker::Internet.password(6, 12, true, true)
+    self.document = Faker::Internet.password(min_length: 6, max_length: 12, mix_case: true, special_characters: true)
     # ensure, that faked data can never be decoded
     self.audience = {}
     self.audience[:aud] = SecureRandom.base58(32)
