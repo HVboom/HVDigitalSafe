@@ -48,3 +48,6 @@ test:
 #
 production:
   <<: *default
+
+demo:
+  <<: *default
