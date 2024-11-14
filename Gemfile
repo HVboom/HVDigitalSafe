@@ -1,7 +1,3 @@
-#ruby=ruby-3.3.0
-#ruby-gemset=HVDigitalSafe
-#
-
 source 'https://rubygems.org'
 
 git_source(:github) do |repo_name|
@@ -9,11 +5,10 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.1'
-# Use mysql as the database for Active Record
-gem 'mysql2' # , '>= 0.3.18', '< 0.5'
+gem 'rails', '~> 7.2'
+# Use postgresql as the database for Active Record
+gem "pg" # , "~> 1.1"
 #
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
@@ -34,6 +29,10 @@ gem 'rack-cors'
 
 # Transfert access tokens JsonWebToken encoded
 gem 'jwt'
+
+# Depricated gems
+# ruby 3.5
+gem 'ostruct'
 
 # Even production DB will be seeded with faked data
 gem 'faker'

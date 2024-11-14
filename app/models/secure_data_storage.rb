@@ -8,7 +8,7 @@ class SecureDataStorage < ApplicationRecord
     super
     # do NOT use the default assign method
     self[:token] = SecureRandom.base58(32)
-    self.document = Faker::Internet.password(min_length: 6, max_length: 12, mix_case: true, special_characters: true)
+    self.document = Faker::Internet.password(min_length: 8, max_length: 20, mix_case: true, special_characters: true)
     # ensure, that faked data can never be decoded
     self.audience = {}
     self.audience[:aud] = SecureRandom.base58(32)
@@ -54,26 +54,9 @@ class SecureDataStorage < ApplicationRecord
   def self.rand(audience)
     return self.new unless audience && audience[:aud]
 
-    begin
-      @@count ||= count
-      @@count = seed! unless @@count > 0
-      # id is hidden to the outside world, therefore the raw data has to be used
-      @@first ||= first[:id]
-
-      retries ||= 0
-      sds = find(Random.rand(@@count) + @@first)
-      sds.audience = audience
-      sds
-    rescue ActiveRecord::RecordNotFound
-      # normally there are no gaps in the ids - therefore it is save to just retry
-      c = @@count
-      f = @@first
-      @@count = nil
-      @@first = nil
-      retry if (retries += 1) < 10
-
-      logger.fatal "Somehow the DB is in a bad state! - number of records: #{c} - first id: #{f}"
-      raise
-    end
+    # FIXME: if seed! is never called, then the table is maybe empty
+    sds = order("RANDOM()").first
+    sds.audience = audience
+    sds
   end
 end

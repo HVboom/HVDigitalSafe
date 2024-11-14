@@ -10,11 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_15_074351) do
-  create_table "secure_data_storages", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+ActiveRecord::Schema[7.2].define(version: 2024_04_15_074351) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "secure_data_storages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "token", null: false, comment: "Unique identifier of the secured document"
     t.text "document", comment: "Base64 encrypted document"
     t.index ["token"], name: "index_secure_data_storages_on_token", unique: true
   end
-
 end

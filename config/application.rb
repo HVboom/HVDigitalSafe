@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 module HVDigitalSafe
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.1
+    config.load_defaults 7.2
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -27,10 +27,15 @@ module HVDigitalSafe
     # Single DB connection
     ### config.active_record.legacy_connection_handling = false
 
+    # Use UUIDs for primary keys by default
+    config.generators do |g|
+      g.orm :active_record, primary_key_type: :uuid
+    end
+
     # Allow access from and to all application specific domains
     # see https://guides.rubyonrails.org/configuring.html#actiondispatch-hostauthorization
-    #   production:  hvdigitalsafe.hvboom.org
-    #   development: hvdigitalsafe.demo.hvboom.org
-    config.hosts = [ %r{hvdigitalsafe\.([^\.]+\.)?hvboom\.org} ]
+    #   production:  hvdigitalsafe.hvboom.biz
+    #   development: hvdigitalsafe.demo.hvboom.biz
+    config.hosts = [ %r{hvdigitalsafe\.([^\.]+\.)?hvboom\.biz} ]
   end
 end
