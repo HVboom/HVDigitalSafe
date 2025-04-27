@@ -1,24 +1,41 @@
-# README
+# HVDigitalSafe 🔐
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+> **A secure API-only service for storing encrypted documents of any size.**
 
-Things you may want to cover:
+---
 
-* Ruby version
+![Ruby](https://img.shields.io/badge/Ruby-3.3.5-red)
+![Rails](https://img.shields.io/badge/Rails-7.2-brightgreen)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16.6-blue)
+![License](https://img.shields.io/github/license/HVboom/HVDigitalSafe)
 
-* System dependencies
+---
 
-* Configuration
+## 📖 About
 
-* Database creation
+**HVDigitalSafe** is a lightweight, API-only Rails application.  
+It securely encrypts and stores text documents of any size in "safe boxes".
 
-* Database initialization
+Typical use cases include:
 
-* How to run the test suite
+- Password storage
+- Secure notes
+- Any sensitive text information
 
-* Services (job queues, cache servers, search engines, etc.)
+Documents are stored fully encrypted inside the database and are never accessible in plain text.
 
-* Deployment instructions
+HVDigitalSafe is designed to be used together with [**HVKeyGuard**](https://github.com/HVboom/HVKeyGuard#readme), a companion application providing a user interface and authentication workflow.
 
-* ...
+---
+
+## 📚 Further Information
+
+To understand how HVDigitalSafe is integrated, please refer to the [HVKeyGuard README](https://github.com/HVboom/HVKeyGuard#readme) for full setup instructions and architecture details.
+
+---
+
+## 📄 License
+
+Distributed under the [MIT License](LICENSE).
+
+---
