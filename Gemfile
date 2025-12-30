@@ -37,6 +37,9 @@ gem 'ostruct'
 # Even production DB will be seeded with faked data
 gem 'faker'
 
+# Fix setting to fit the version used by the current Ruby
+gem "stringio", "= 3.1.2"
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :windows]
